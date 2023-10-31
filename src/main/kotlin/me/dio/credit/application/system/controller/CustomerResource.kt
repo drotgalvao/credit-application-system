@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
+import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/api/customers")
 class CustomerResource(private val customerService: CustomerService) {
 
     @PostMapping
-    fun saveCustomer(@RequestBody customerDto: CustomerDto): ResponseEntity<String> {
+    fun saveCustomer(@RequestBody @Valid customerDto: CustomerDto): ResponseEntity<String> {
         val savedCustomer = this.customerService.save(customerDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Customer ${savedCustomer.email} saved!")
@@ -38,7 +39,7 @@ class CustomerResource(private val customerService: CustomerService) {
     fun deleteCustomer(@PathVariable id: Long) = this.customerService.delete(id)
 
     @PatchMapping
-    fun updateCustomer(@RequestParam(value = "customerId") id: Long, @RequestBody customerUpdateDto: CustomerUpdateDto): ResponseEntity<CustomerView> {
+    fun updateCustomer(@RequestParam(value = "customerId") id: Long, @RequestBody @Valid customerUpdateDto: CustomerUpdateDto): ResponseEntity<CustomerView> {
         val customer: Customer = this.customerService.findById(id)
         val customerToUpdate: Customer = customerUpdateDto.toEntity(customer)
         val customerUpdated: Customer = this.customerService.save(customerToUpdate) 

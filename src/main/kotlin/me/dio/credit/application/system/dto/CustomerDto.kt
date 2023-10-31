@@ -3,16 +3,20 @@ package me.dio.credit.application.system.dto
 import java.math.BigDecimal
 import me.dio.credit.application.system.entity.Customer
 import me.dio.credit.application.system.entity.Address
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Email
+import org.hibernate.validator.constraints.br.CPF
 
 data class CustomerDto(
-        val firstName: String,
-        val lastName: String,
-        val cpf: String,
-        val email: String,
-        val income: BigDecimal,
-        val password: String,
-        val zipCode: String,
-        val street: String
+        @field:NotEmpty(message = "First name is required") val firstName: String,
+        @field:NotEmpty(message = "Last name is required") val lastName: String,
+        @field:CPF(message = "Invalid CPF format") val cpf: String,
+        @field:Email(message = "Invalid email format") val email: String,
+        @field:NotNull(message = "Income is required") val income: BigDecimal,
+        @field:NotEmpty(message = "Password is required") val password: String,
+        @field:NotEmpty(message = "Zip code is required") val zipCode: String,
+        @field:NotEmpty(message = "Street is required") val street: String
 ) {
 
     fun toEntity(): Customer =

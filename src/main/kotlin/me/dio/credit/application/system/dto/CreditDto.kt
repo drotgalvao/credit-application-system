@@ -4,12 +4,15 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import me.dio.credit.application.system.entity.Credit
 import me.dio.credit.application.system.entity.Customer
+import jakarta.validation.constraints.Future
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Max
 
 data class CreditDto (
-    val creditValue: BigDecimal,
-    val dayFirstOfInstallment: LocalDate,
-    val numberOfInstallments: Int,
-    val customerId: Long
+    @field:NotNull(message = "Credit value must be informed") val creditValue: BigDecimal,
+    @field:Future(message = "Installment date must be future") val dayFirstOfInstallment: LocalDate,
+    @field:Max(value = 48, message = "Number of installments must be up to 48 months") val numberOfInstallments: Int,
+    @field:NotNull(message = "Customer id must be informed") val customerId: Long
 ) {
     fun toEntity(): Credit = Credit(
         creditValue = this.creditValue,
